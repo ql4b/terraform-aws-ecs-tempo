@@ -1,0 +1,34 @@
+server:
+  http_listen_address: 0.0.0.0
+  http_listen_port: 3200
+  grpc_listen_address: 0.0.0.0
+  grpc_listen_port: 9095
+
+distributor:
+  receivers:
+    otlp:
+      protocols:
+        http:
+          endpoint: 0.0.0.0:4318
+        grpc:
+          endpoint: 0.0.0.0:4317
+
+storage:
+  trace:
+    backend: s3
+    s3:
+      bucket: ${S3_BUCKET}
+      endpoint: ${S3_ENDPOINT}
+    wal:
+      path: /tmp/tempo/wal
+
+ingester:
+  max_block_duration: 5m
+  complete_block_timeout: 10m
+
+compactor:
+  compaction:
+    block_retention: ${BLOCK_RETENTION}
+
+usage_report:
+  reporting_enabled: false
